@@ -17,14 +17,14 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        cGray: '#d9d8dd',
+        rightside: '#F2EBE3',
         cBeige: '#f6f7f2',
         cBlue: '#3c4f6d', 
-        cLighBlue: '#a5b5c4',
-        cDarkBlue: '#0A1944',
-        nWhite: '#F6F7F2',
-        hWhite: '#faf6ef',
-        mWhite: '#FFFFFF'
+        cLighBlue: '#A5B5C4',
+        cLeft: '#E9E2CF',
+        mbWhite: '#F8F6F0',
+        mWhite: '#F5F5F5',
+        buttonB: '#F7E7CE'
       },
     },
   },

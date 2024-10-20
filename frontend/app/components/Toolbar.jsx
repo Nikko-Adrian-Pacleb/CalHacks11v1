@@ -29,8 +29,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("bold")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-black text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faBold} />
@@ -43,8 +43,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("italic")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-black text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faItalic} />
@@ -57,8 +57,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("underline")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-black text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faUnderline} />
@@ -71,8 +71,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("strike")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-dblack text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faStrikethrough} />
@@ -85,8 +85,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("heading", { level: 2 })
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-dblack text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faHeading} />
@@ -99,8 +99,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("bulletList")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-dblack text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faList} />
@@ -113,8 +113,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("orderedList")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-dblack text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faListOl} />
@@ -127,8 +127,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("blockquote")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-black text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faQuoteLeft} />
@@ -141,8 +141,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("code")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400"
+              ? "bg-black text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faCode} />
@@ -155,8 +155,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("undo")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400 hover:bg-sky-700 hover:text-white p-1 hover:rounded-lg"
+              ? "bg-black text-white p-2 rounded-lg"
+              : "text-black hover:bg-black hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faUndo} />
@@ -169,8 +169,8 @@ const Toolbar = ({ editor, content }) => {
           }}
           className={
             editor.isActive("redo")
-              ? "bg-sky-700 text-white p-2 rounded-lg"
-              : "text-sky-400 hover:bg-sky-700 hover:text-white p-1 hover:rounded-lg"
+              ? "bg-black text-white p-2 rounded-lg"
+              : "text-black hover:bg-sky-700 hover:text-white p-1 hover:rounded-lg"
           }
         >
           <FontAwesomeIcon icon={faRedo} />
