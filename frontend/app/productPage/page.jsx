@@ -69,7 +69,7 @@ export default function Home() {
       getMoreInfo();
       getMistakes();
       handleSectionChangeClick(activeSection.title);
-    }, 1000), // Delay of 1 second
+    }, 2000), // Delay
     [currentNote, activeSection] // Dependency array to ensure latest note
   );
 
@@ -115,10 +115,10 @@ export default function Home() {
       if (data.output) {
         setSummary(data.output);
         // Update active section immediately after setting summary
-        if (activeSection.title == "Summary") {
+        if (activeSection.title === "Summary") {
           setActiveSection({
             title: "Summary",
-            content: data.output,
+            content: summary,
           });
         }
       } else {
@@ -146,10 +146,10 @@ export default function Home() {
       if (data.output) {
         setMoreInfo(data.output);
         // Update active section immediately after setting more info
-        if (activeSection.title == "More Info") {
+        if (activeSection.title === "More Info") {
           setActiveSection({
             title: "More Info",
-            content: data.output,
+            content: moreInfo,
           });
         }
       } else {
@@ -177,10 +177,10 @@ export default function Home() {
       if (data.output) {
         setMistakes(data.output);
         // Update active section immediately after setting mistakes
-        if (activeSection.title == "Mistakes") {
+        if (activeSection.title === "Mistakes") {
           setActiveSection({
             title: "Mistakes",
-            content: data.output,
+            content: mistakes,
           });
         }
       } else {
