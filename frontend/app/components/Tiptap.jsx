@@ -14,7 +14,7 @@ const Tiptap = ({ content, onContentChange }) => {
     editorProps: {
       attributes: {
         class:
-          "flex flex-col px-4 py-3 justif-start text-gray-400 items-start gap-3 font-medium text-[16px] pt-4 rounded-bl-md rounded-br-md outline-none text-cDarkBlack",
+          "flex flex-col py-3 justify-start text-gray-400 items-start font-medium text-[16px] pt-4 rounded-bl-md rounded-br-md outline-none text-cDarkBlack w-full", // Ensure full width
       },
     },
   });
@@ -27,9 +27,16 @@ const Tiptap = ({ content, onContentChange }) => {
   }, [content, editor]);
 
   return (
-    <div className="max-w-2xl mx-auto px-4">
+    <div className="flex flex-col justify-center align-center w-full">
+      {" "}
+      {/* Ensure full width */}
       <Toolbar editor={editor} content={content} />
-      <EditorContent style={{ whiteSpace: "pre-line" }} editor={editor} />
+      <EditorContent
+        style={{ whiteSpace: "pre-line" }}
+        editor={editor}
+        className="w-full"
+      />{" "}
+      {/* Full width for editor content */}
     </div>
   );
 };
