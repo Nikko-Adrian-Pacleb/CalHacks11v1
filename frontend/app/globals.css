@@ -13,3 +13,396 @@
   font-size: 30px;
 }
 
+.tiptap h3 {
+  color: aqua;
+}
+
+/* Summary-box */
+/* Styling the container */
+#summary-box {
+  padding: 20px;
+  background-color: #f9f9f9; /* Light gray background */
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6; /* Better readability */
+  max-width: 800px;
+  margin: 0 auto; /* Center align */
+}
+
+/* Headings */
+#summary-box h1 {
+  font-size: 24px;
+  color: #2c3e50; /* Darker color for titles */
+  margin-bottom: 16px;
+}
+
+#summary-box h2 {
+  font-size: 20px;
+  color: #34495e;
+  margin-bottom: 12px;
+}
+
+#summary-box h3 {
+  font-size: 18px;
+  color: #4a6fa5;
+  margin-bottom: 10px;
+}
+
+/* Paragraphs */
+#summary-box p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px; /* Space between paragraphs */
+  text-align: justify; /* Justified alignment */
+}
+
+/* Links */
+#summary-box a {
+  color: #2980b9; /* Blue links */
+  text-decoration: underline;
+}
+
+#summary-box a:hover {
+  color: #1abc9c; /* Change color on hover */
+  text-decoration: none;
+}
+
+/* Lists */
+#summary-box ul, #summary-box ol {
+  padding-left: 20px; /* Indentation for lists */
+  margin-bottom: 12px;
+}
+
+#summary-box ul {
+  list-style-type: disc; /* Bullet points */
+}
+
+#summary-box ol {
+  list-style-type: decimal; /* Numbered lists */
+}
+
+#summary-box li {
+  margin-bottom: 6px; /* Space between list items */
+}
+
+/* Blockquotes */
+#summary-box blockquote {
+  border-left: 4px solid #7f8c8d; /* Left border */
+  padding-left: 16px;
+  margin-left: 0;
+  color: #555;
+  font-style: italic;
+  background-color: #f0f0f0; /* Light background for blockquote */
+}
+
+/* Code blocks */
+#summary-box pre {
+  background-color: #2c3e50; /* Dark background */
+  color: #ecf0f1; /* Light text */
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto; /* Scroll for wide code blocks */
+}
+
+#summary-box code {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #ecf0f1;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Tables */
+#summary-box table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+#summary-box th, #summary-box td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+#summary-box th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Images */
+#summary-box img {
+  max-width: 100%; /* Responsive images */
+  height: auto;
+  border-radius: 6px; /* Rounded corners */
+  margin-bottom: 12px;
+}
+
+/* Horizontal rule */
+#summary-box hr {
+  border: 0;
+  height: 1px;
+  background-color: #ccc;
+  margin: 20px 0;
+}
+
+
+/* Styling the more info container */
+#moreinfo {
+  padding: 20px;
+  background-color: #f4f8fb; /* Light blue background */
+  border-radius: 8px;
+  border: 1px solid #d1e7f1;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Headings */
+#moreinfo h1 {
+  font-size: 22px;
+  color: #1a5276; /* Dark blue for titles */
+  margin-bottom: 16px;
+}
+
+#moreinfo h2 {
+  font-size: 20px;
+  color: #2980b9;
+  margin-bottom: 12px;
+}
+
+#moreinfo h3 {
+  font-size: 18px;
+  color: #5499c7;
+  margin-bottom: 10px;
+}
+
+/* Paragraphs */
+#moreinfo p {
+  font-size: 16px;
+  color: #2c3e50; /* Slightly darker gray-blue */
+  margin-bottom: 12px;
+  text-align: justify;
+}
+
+/* Links */
+#moreinfo a {
+  color: #2980b9; /* Blue links */
+  text-decoration: underline;
+}
+
+#moreinfo a:hover {
+  color: #1abc9c; /* Change to teal on hover */
+  text-decoration: none;
+}
+
+/* Lists */
+#moreinfo ul, #moreinfo ol {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+#moreinfo ul {
+  list-style-type: circle; /* Circular bullet points */
+}
+
+#moreinfo ol {
+  list-style-type: lower-roman; /* Roman numerals for lists */
+}
+
+#moreinfo li {
+  margin-bottom: 6px;
+}
+
+/* Blockquotes */
+#moreinfo blockquote {
+  border-left: 4px solid #2980b9; /* Blue left border */
+  padding-left: 16px;
+  margin-left: 0;
+  color: #555;
+  background-color: #eaf2f8; /* Very light blue background */
+  font-style: italic;
+}
+
+/* Code blocks */
+#moreinfo pre {
+  background-color: #154360; /* Dark blue background */
+  color: #ecf0f1; /* Light text */
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+#moreinfo code {
+  background-color: #ecf0f1;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #1a5276; /* Dark blue for inline code */
+}
+
+/* Tables */
+#moreinfo table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+#moreinfo th, #moreinfo td {
+  border: 1px solid #d1e7f1;
+  padding: 8px;
+  text-align: left;
+}
+
+#moreinfo th {
+  background-color: #d4e6f1;
+  font-weight: bold;
+}
+
+/* Images */
+#moreinfo img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+/* Horizontal rule */
+#moreinfo hr {
+  border: 0;
+  height: 1px;
+  background-color: #ddd;
+  margin: 20px 0;
+}
+
+
+/* Styling the mistakes container */
+#mistakes {
+  padding: 20px;
+  background-color: #fdf2f0; /* Light red background */
+  border-radius: 8px;
+  border: 1px solid #f5b7b1;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Headings */
+#mistakes h1 {
+  font-size: 22px;
+  color: #c0392b; /* Dark red for titles */
+  margin-bottom: 16px;
+}
+
+#mistakes h2 {
+  font-size: 20px;
+  color: #e74c3c; /* Red for subheadings */
+  margin-bottom: 12px;
+}
+
+#mistakes h3 {
+  font-size: 18px;
+  color: #ec7063; /* Lighter red */
+  margin-bottom: 10px;
+}
+
+/* Paragraphs */
+#mistakes p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px;
+  text-align: justify;
+}
+
+/* Links */
+#mistakes a {
+  color: #e74c3c; /* Red links */
+  text-decoration: underline;
+}
+
+#mistakes a:hover {
+  color: #c0392b; /* Dark red on hover */
+  text-decoration: none;
+}
+
+/* Lists */
+#mistakes ul, #mistakes ol {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+#mistakes ul {
+  list-style-type: square; /* Square bullet points */
+}
+
+#mistakes ol {
+  list-style-type: decimal; /* Numbered lists */
+}
+
+#mistakes li {
+  margin-bottom: 6px;
+}
+
+/* Blockquotes */
+#mistakes blockquote {
+  border-left: 4px solid #c0392b; /* Dark red border */
+  padding-left: 16px;
+  margin-left: 0;
+  color: #555;
+  background-color: #f9ebea; /* Light red background */
+  font-style: italic;
+}
+
+/* Code blocks */
+#mistakes pre {
+  background-color: #922b21; /* Dark red background */
+  color: #ecf0f1; /* Light text */
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+#mistakes code {
+  background-color: #f2d7d5; /* Light red for inline code */
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #c0392b; /* Dark red */
+}
+
+/* Tables */
+#mistakes table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+#mistakes th, #mistakes td {
+  border: 1px solid #f5b7b1;
+  padding: 8px;
+  text-align: left;
+}
+
+#mistakes th {
+  background-color: #f5c6cb;
+  font-weight: bold;
+}
+
+/* Images */
+#mistakes img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+/* Horizontal rule */
+#mistakes hr {
+  border: 0;
+  height: 1px;
+  background-color: #f5b7b1;
+  margin: 20px 0;
+}

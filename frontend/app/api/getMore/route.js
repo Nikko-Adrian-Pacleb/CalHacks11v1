@@ -6,7 +6,7 @@ export async function POST(req, res) {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const data = await req.json();
-    const prompt = data.body;
+    const prompt = data.htmlContent;
     const result = await model.generateContent([
       "You are an AI assistant in a note-taking app.",
       "Your role is to provide additional relevant information, context, or background to supplement the user's notes, adhering strictly to Markdown formatting.",

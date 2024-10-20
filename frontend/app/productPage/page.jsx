@@ -20,11 +20,12 @@ export default function Home() {
   ]);
 
   const [currentNote, setCurrentNote] = useState(notes[0]);
-  const [isEditing, setIsEditing] = useState(true); // Keep this true to allow immediate editing after creation
-  const [summary, setSummary] = useState(""); // New state for storing the summary
-  const [loading, setLoading] = useState(false); // Loading state
+  const [isEditing, setIsEditing] = useState(true);
+  const [summary, setSummary] = useState("");
+  const [moreInfo, setMoreInfo] = useState("");
+  const [mistakes, setMistakes] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Function to handle content updates from the Tiptap editor
   const handleContentChange = (updatedContent, updatedHtmlContent) => {
     setCurrentNote((prevNote) => ({
       ...prevNote,
@@ -56,7 +57,6 @@ export default function Home() {
     setIsEditing(true); // Set editing mode to true to allow title editing
   };
 
-  // Function to generate the summary using the API
   const generateSummary = async () => {
     setLoading(true);
     try {
@@ -95,6 +95,53 @@ export default function Home() {
           : note
       )
     );
+
+  const getMoreInfo = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/getMore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentNote),
+      });
+
+      const data = await response.json();
+      if (data.output) {
+        setMoreInfo(data.output);
+      } else {
+        setMoreInfo("Failed to get more information");
+      }
+    } catch (error) {
+      setMoreInfo("Error getting more information");
+      console.error("Error:", error);
+    }
+    setLoading(false);
+  };
+
+  const getMistakes = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/getMistakes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentNote), // Wrap HTML in a JSON object
+      });
+
+      const data = await response.json();
+      if (data.output) {
+        setMistakes(data.output); // Set the summary
+      } else {
+        setMistakes("Failed to generate summary");
+      }
+    } catch (error) {
+      setMistakes("Error generating summary");
+      console.error("Error:", error);
+    }
+    setLoading(false);
   };
 
   return (
@@ -149,13 +196,18 @@ export default function Home() {
       </div>
 
       {/* Right Sidebar */}
-      <div className="w-1/4 bg-gray-200 p-4 space-y-4">
-        <div className="bg-gray-300 h-32 rounded-lg flex flex-col items-center justify-center">
-          <h3>Summary</h3>
-          <div className="text-center">
+      <div className="w-1/4 bg-gray-200 p-4 space-y-6">
+        {/* Summary Section */}
+        <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
+          <h3 className="text-lg font-semibold">Summary</h3>
+          <div className="text-center mt-2">
             {summary ? (
               <>
-                <p>{summary}</p>
+                <div
+                  className="text-sm flex flex-col text-start"
+                  id="summary-box"
+                  dangerouslySetInnerHTML={{ __html: marked(summary) }}
+                ></div>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
                   onClick={generateSummary}
@@ -173,11 +225,63 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="bg-gray-300 h-32 rounded-lg flex items-center justify-center">
-          <h3>More Info</h3>
+
+        {/* More Info Section */}
+        <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
+          <h3 className="text-lg font-semibold">More Info</h3>
+          <div className="text-center mt-2">
+            {moreInfo ? (
+              <>
+                <div
+                  className="text-sm flex flex-col text-start"
+                  id="moreinfo-box"
+                  dangerouslySetInnerHTML={{ __html: moreInfo }}
+                ></div>
+                <button
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
+                  onClick={getMoreInfo}
+                >
+                  {loading ? "Getting more info..." : "Get More Info"}
+                </button>
+              </>
+            ) : (
+              <button
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
+                onClick={getMoreInfo}
+              >
+                {loading ? "Getting more info..." : "Get More Info"}
+              </button>
+            )}
+          </div>
         </div>
-        <div className="bg-gray-300 h-32 rounded-lg flex items-center justify-center">
-          <h3>Mistakes</h3>
+
+        {/* Mistakes Section */}
+        <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
+          <h3 className="text-lg font-semibold">Mistakes</h3>
+          <div className="text-center mt-2">
+            {mistakes ? (
+              <>
+                <div
+                  className="text-sm flex flex-col text-start"
+                  id="mistakes-box"
+                  dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
+                ></div>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+                  onClick={getMistakes}
+                >
+                  {loading ? "Finding mistakes..." : "Find Mistakes"}
+                </button>
+              </>
+            ) : (
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+                onClick={getMistakes}
+              >
+                {loading ? "Finding mistakes..." : "Find Mistakes"}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
