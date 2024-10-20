@@ -1,5 +1,6 @@
 "use client";
 import { useState, useCallback, act } from "react";
+import { useEffect } from "react";
 import Tiptap from "../components/Tiptap";
 import { marked } from "marked";
 import { NetworkDiagram } from "../components/NetworkDiagram";
@@ -445,6 +446,27 @@ export default function Home() {
       setCurrentNote(clickedNote); // Update the current note
     }
   };
+
+  // Add h3 click event listener when editor content changes
+  useEffect(() => {
+    const h3Elements = document.querySelectorAll("h3");
+    h3Elements.forEach((h3) => {
+      h3.addEventListener("click", () => {
+        const noteTitle = h3.textContent.trim(); // Get the h3 text content
+        const clickedNote = notes.find((note) => note.title === noteTitle);
+        if (clickedNote) {
+          setCurrentNote(clickedNote); // Set the current note
+        }
+      });
+    });
+
+    // Cleanup event listeners when component unmounts
+    return () => {
+      h3Elements.forEach((h3) => {
+        h3.removeEventListener("click", () => {});
+      });
+    };
+  }, [notes, currentNote.htmlContent]);
 
   return (
     <div className="flex h-screen">
