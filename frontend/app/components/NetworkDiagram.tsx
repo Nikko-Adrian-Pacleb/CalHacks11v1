@@ -75,15 +75,16 @@ export const drawNetwork = (
               'link',
               d3.forceLink(data.links || []).id((d: any) => d.id).distance(100)
             )
-            .force('charge', d3.forceManyBody().strength(-50)) // Weaken repulsion between all nodes (less repulsion than before)
-            .force('center', d3.forceCenter(width / 2, height / 2)) // Standard centering for the whole graph
-            .force('collide', d3.forceCollide().radius(RADIUS + 1)) // Slight collision radius to allow nodes to be closer without overlapping
+            .force('charge', d3.forceManyBody().strength(-30)) // Reduced repulsion to keep nodes closer
+            .force('center', d3.forceCenter(width / 2, height / 2)) // Center for the graph as a whole
+            .force('collide', d3.forceCollide().radius(RADIUS + 5)) // Prevents overlap of nodes, but allows them to be closer
             .force('activeNoteToCenter', (alpha) => {
-              // This custom force pulls the active note toward the center
+              // This custom force pulls the active note toward the center more strongly
               data.nodes.forEach((node) => {
                 if (node.id === activeNote) {
-                  node.vx += (width / 2 - node.x) * 0.05 * alpha; // Pull towards center X (reduce the strength slightly to avoid abrupt movement)
-                  node.vy += (height / 2 - node.y) * 0.05 * alpha; // Pull towards center Y
+                  // Stronger pull towards center (adjust the 0.1 factor for finer control)
+                  node.vx += (width / 2 - node.x) * 0.1 * alpha; 
+                  node.vy += (height / 2 - node.y) * 0.1 * alpha;
                 }
               });
             });
@@ -123,6 +124,7 @@ export const drawNetwork = (
           console.error('An error occurred during the network simulation setup:', error);
         }
       }, [data, width, height, activeNote, onNodeClick]); // Add onNodeClick as dependency
+    
       
   
     return (
