@@ -65,6 +65,7 @@ export async function POST(req, res) {
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const output = await response.text();
+    console.log(await response.text());
     // Assuming Gemini's response will be a JSON array of connections
     return NextResponse.json({ connections: JSON.parse(output) });
   } catch (error) {
