@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Tiptap from "../components/Tiptap";
 import { marked } from "marked";
+
 export default function Home() {
   const [notes, setNotes] = useState([
     {
@@ -19,19 +20,19 @@ export default function Home() {
   ]);
 
   const [currentNote, setCurrentNote] = useState(notes[0]);
-  const [isEditing, setIsEditing] = useState(true);
+  const [isEditing, setIsEditing] = useState(true); // Keep this true to allow immediate editing after creation
   const [summary, setSummary] = useState(""); // New state for storing the summary
   const [loading, setLoading] = useState(false); // Loading state
 
   // Function to handle content updates from the Tiptap editor
   const handleContentChange = (updatedContent, updatedHtmlContent) => {
-    setCurrentNote({
-      ...currentNote,
+    setCurrentNote((prevNote) => ({
+      ...prevNote,
       content: updatedContent,
       htmlContent: updatedHtmlContent,
-    });
-    setNotes(
-      notes.map((note) =>
+    }));
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
         note.noteId === currentNote.noteId
           ? {
               ...note,
@@ -44,15 +45,15 @@ export default function Home() {
   };
 
   const addNewNote = () => {
-    const newNoteId = notes.length;
+    const newNoteId = notes.length; // This generates a new note ID based on the length of the notes array
     const newNote = {
       noteId: newNoteId,
-      title: `New Note ${newNoteId + 1}`,
+      title: `New Note ${newNoteId + 1}`, // Automatically generated title
       content: "",
     };
-    setNotes([...notes, newNote]);
-    setCurrentNote(newNote);
-    setIsEditing(true);
+    setNotes([...notes, newNote]); // Add the new note to the notes array
+    setCurrentNote(newNote); // Set the new note as the current note
+    setIsEditing(true); // Set editing mode to true to allow title editing
   };
 
   // Function to generate the summary using the API
@@ -80,6 +81,22 @@ export default function Home() {
     setLoading(false);
   };
 
+  // Handle title change
+  const handleTitleChange = (e) => {
+    const updatedTitle = e.target.value; // Get the updated title from the input field
+    setCurrentNote((prevNote) => ({
+      ...prevNote,
+      title: updatedTitle, // Update the current note title
+    }));
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.noteId === currentNote.noteId
+          ? { ...note, title: updatedTitle } // Update the note title in the notes array
+          : note
+      )
+    );
+  };
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -89,7 +106,7 @@ export default function Home() {
           {notes.map((note) => (
             <li
               key={note.noteId}
-              className="border-b border-gray-500 pb-2"
+              className="border-b border-gray-500 pb-2 cursor-pointer"
               onClick={() => {
                 setCurrentNote(note);
                 setIsEditing(true);
@@ -110,7 +127,15 @@ export default function Home() {
       {/* Main Content */}
       <div className="bg-gray-100 flex-grow p-8">
         <div className="bg-white rounded-lg p-6 shadow-lg">
-          <h1 className="text-3xl font-bold mb-4">{currentNote.title}</h1>
+          <h1 className="text-3xl font-bold mb-4">
+            <input
+              type="text"
+              value={currentNote.title}
+              onChange={handleTitleChange} // Handle title changes
+              className="border border-gray-400 rounded p-2 w-full"
+            />
+          </h1>
+
           <div className="border border-gray-400 p-4 rounded-lg">
             {isEditing && (
               <Tiptap
