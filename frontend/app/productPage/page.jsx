@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Tiptap from "../components/Tiptap";
 import { marked } from "marked";
 
@@ -26,15 +26,24 @@ export default function Home() {
   const [mistakes, setMistakes] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Add state to control sidebar visibility
+  const [debounceTimeout, setDebounceTimeout] = useState(null); // Debounce timer
+
+  // Debounce function to limit API calls
+  const debounce = (func, delay) => {
+    return (...args) => {
+      if (debounceTimeout) clearTimeout(debounceTimeout);
+      setDebounceTimeout(setTimeout(() => func(...args), delay));
+    };
+  };
 
   const handleContentChange = (updatedContent, updatedHtmlContent) => {
-    setCurrentNote({
-      ...currentNote,
+    setCurrentNote((prevNote) => ({
+      ...prevNote,
       content: updatedContent,
       htmlContent: updatedHtmlContent,
-    });
-    setNotes(
-      notes.map((note) =>
+    }));
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
         note.noteId === currentNote.noteId
           ? {
               ...note,
@@ -44,18 +53,46 @@ export default function Home() {
           : note
       )
     );
+
+    // Trigger debounced API calls when content changes
+    debounceApiCalls();
   };
 
+  // Debounced function to handle summary, more info, and mistakes calls
+  const debounceApiCalls = useCallback(
+    debounce(() => {
+      generateSummary();
+      getMoreInfo();
+      getMistakes();
+    }, 1000), // Delay of 1 second
+    [currentNote] // Dependency array to ensure latest note
+  );
+
   const addNewNote = () => {
-    const newNoteId = notes.length;
+    const newNoteId = notes.length; // Generate new note ID based on array length
     const newNote = {
       noteId: newNoteId,
-      title: `New Note ${newNoteId + 1}`,
+      title: `New Note ${newNoteId + 1}`, // Automatically generated title
       content: "",
     };
-    setNotes([...notes, newNote]);
-    setCurrentNote(newNote);
-    setIsEditing(true);
+    setNotes([...notes, newNote]); // Add new note to array
+    setCurrentNote(newNote); // Set new note as current
+    setIsEditing(true); // Allow editing for new note
+  };
+
+  const handleTitleChange = (e) => {
+    const updatedTitle = e.target.value; // Get updated title from input field
+    setCurrentNote((prevNote) => ({
+      ...prevNote,
+      title: updatedTitle, // Update current note title
+    }));
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.noteId === currentNote.noteId
+          ? { ...note, title: updatedTitle }
+          : note
+      )
+    );
   };
 
   const generateSummary = async () => {
@@ -114,17 +151,18 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(currentNote),
+
+        body: JSON.stringify(currentNote), // Send note as JSON
       });
 
       const data = await response.json();
       if (data.output) {
         setMistakes(data.output);
       } else {
-        setMistakes("Failed to generate summary");
+        setMistakes("Failed to find mistakes");
       }
     } catch (error) {
-      setMistakes("Error generating summary");
+      setMistakes("Error finding mistakes");
       console.error("Error:", error);
     }
     setLoading(false);
@@ -138,6 +176,7 @@ export default function Home() {
           isSidebarOpen ? "w-1/4" : "w-12"
         }`}
       >
+
         <button
           className="bg-gray-400 text-black p-2 rounded-full mb-4"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -174,7 +213,15 @@ export default function Home() {
       {/* Main Content */}
       <div className="bg-gray-100 flex-grow p-8">
         <div className="bg-white rounded-lg p-6 shadow-lg">
-          <h1 className="text-3xl font-bold mb-4">{currentNote.title}</h1>
+          <h1 className="text-3xl font-bold mb-4">
+            <input
+              type="text"
+              value={currentNote.title}
+              onChange={handleTitleChange} // Handle title changes
+              className="border border-gray-400 rounded p-2 w-full"
+            />
+          </h1>
+
           <div className="border border-gray-400 p-4 rounded-lg">
             {isEditing && (
               <Tiptap
@@ -194,26 +241,13 @@ export default function Home() {
           <h3 className="text-lg font-semibold">Summary</h3>
           <div className="text-center mt-2">
             {summary ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="summary-box"
-                  dangerouslySetInnerHTML={{ __html: marked(summary) }}
-                ></div>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={generateSummary}
-                >
-                  {loading ? "Regenerating..." : "Regenerate Summary"}
-                </button>
-              </>
+              <div
+                className="text-sm flex flex-col text-start"
+                id="summary-box"
+                dangerouslySetInnerHTML={{ __html: marked(summary) }}
+              ></div>
             ) : (
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={generateSummary}
-              >
-                {loading ? "Generating..." : "Get Summary"}
-              </button>
+              <div>No summary available</div>
             )}
           </div>
         </div>
@@ -223,26 +257,13 @@ export default function Home() {
           <h3 className="text-lg font-semibold">More Info</h3>
           <div className="text-center mt-2">
             {moreInfo ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="moreinfo-box"
-                  dangerouslySetInnerHTML={{ __html: moreInfo }}
-                ></div>
-                <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={getMoreInfo}
-                >
-                  {loading ? "Getting more info..." : "Get More Info"}
-                </button>
-              </>
+              <div
+                className="text-sm flex flex-col text-start"
+                id="moreinfo-box"
+                dangerouslySetInnerHTML={{ __html: marked(moreInfo) }}
+              ></div>
             ) : (
-              <button
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={getMoreInfo}
-              >
-                {loading ? "Getting more info..." : "Get More Info"}
-              </button>
+              <div>No additional information available</div>
             )}
           </div>
         </div>
@@ -252,26 +273,13 @@ export default function Home() {
           <h3 className="text-lg font-semibold">Mistakes</h3>
           <div className="text-center mt-2">
             {mistakes ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="mistakes-box"
-                  dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
-                ></div>
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={getMistakes}
-                >
-                  {loading ? "Finding mistakes..." : "Find Mistakes"}
-                </button>
-              </>
+              <div
+                className="text-sm flex flex-col text-start"
+                id="mistakes-box"
+                dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
+              ></div>
             ) : (
-              <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={getMistakes}
-              >
-                {loading ? "Finding mistakes..." : "Find Mistakes"}
-              </button>
+              <div>No mistakes found</div>
             )}
           </div>
         </div>
