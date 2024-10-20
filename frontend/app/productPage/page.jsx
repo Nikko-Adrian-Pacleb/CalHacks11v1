@@ -245,10 +245,10 @@ export default function Home() {
               ))}
             </ul>
             <button
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
+              className="text-2xl hover:bold text-white px-4 rounded mt-2"
               onClick={addNewNote}
             >
-              Add Note
+              +
             </button>
           </div>
         )}
@@ -305,7 +305,7 @@ export default function Home() {
           {loading ? <p>Loading</p> : <></>}
           <h3 className="text-lg font-semibold">{activeSection.title}</h3>
           <div
-            className="text-sm flex flex-col text-start mt-2"
+            className="text-sm flex flex-col text-start mt-2 scroll-smooth focus:scroll-auto"
             dangerouslySetInnerHTML={{ __html: marked(activeSection.content) }}
           ></div>
         </div>
