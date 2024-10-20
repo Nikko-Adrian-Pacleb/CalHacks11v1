@@ -12,12 +12,12 @@ export default function Home() {
       }}
     >
       <div>
-        <h1 className="font-bold font-title  text-9xl text-cDarkBlue ">Note Today</h1>
+        <h1 className="font-bold font-title  text-9xl text-cDarkBlue ">BrainHive</h1>
         <p className="font-para text-cDarkBlue">A more personalized touch to your notes</p>
       </div>
       <Link href="./productPage">
         <button className="mt-8 bg-nWhite hover:bg-hWhite text-black font-bold py-2 px-4 rounded">
-          Note Now
+          Try now
         </button>
       </Link>
     </main>
