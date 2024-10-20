@@ -24,7 +24,8 @@ module.exports = {
         cLeft: '#E9E2CF',
         mbWhite: '#F8F6F0',
         mWhite: '#F5F5F5',
-        buttonB: '#F7E7CE'
+        buttonB: '#F7E7CE',
+        nWhite: '#E9E2CF',
       },
     },
   },
