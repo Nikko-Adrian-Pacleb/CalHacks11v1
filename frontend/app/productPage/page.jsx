@@ -25,6 +25,7 @@ export default function Home() {
   const [moreInfo, setMoreInfo] = useState("");
   const [mistakes, setMistakes] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activeSection, setActiveSection] = useState("summary"); // New state to track the active section
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Add state to control sidebar visibility
   const [debounceTimeout, setDebounceTimeout] = useState(null); // Debounce timer
 
@@ -151,8 +152,8 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(currentNote),
 
-        body: JSON.stringify(currentNote), // Send note as JSON
       });
 
       const data = await response.json();
@@ -166,6 +167,19 @@ export default function Home() {
       console.error("Error:", error);
     }
     setLoading(false);
+  };
+
+  // Function to handle button click and update active section
+  const handleButtonClick = (section) => {
+    setActiveSection(section);
+    // Optionally, you can fetch data if needed when switching sections
+    if (section === "summary") {
+      setActiveSection(summary)
+    } else if (section === "moreInfo") {
+      setActiveSection(moreInfo)
+    } else if (section === "mistakes") {
+      setActiveSection(mistakes)
+    }
   };
 
   return (
@@ -235,53 +249,58 @@ export default function Home() {
       </div>
 
       {/* Right Sidebar */}
-      <div className="w-1/4 bg-gray-200 p-4 space-y-6">
-        {/* Summary Section */}
+      <div className="w-1/4 bg-gray-200 p-4 space-y-4">
+        {/* Button for different implementations */}
+        <button
+          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          onClick={() => handleButtonClick("summary")}
+        >
+          Summary
+        </button>
+        <button
+          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          onClick={() => handleButtonClick("moreInfo")}
+        >
+          More Info
+        </button>
+        <button
+          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          onClick={() => handleButtonClick("mistakes")}
+        >
+          Mistakes
+        </button>
+
+
+        {/* Content Section */}
         <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
-          <h3 className="text-lg font-semibold">Summary</h3>
-          <div className="text-center mt-2">
-            {summary ? (
+          {activeSection === "summary" && (
+            <>
+              <h3 className="text-lg font-semibold">Summary</h3>
               <div
-                className="text-sm flex flex-col text-start"
-                id="summary-box"
+                className="text-sm flex flex-col text-start mt-2"
                 dangerouslySetInnerHTML={{ __html: marked(summary) }}
               ></div>
-            ) : (
-              <div>No summary available</div>
-            )}
-          </div>
-        </div>
-
-        {/* More Info Section */}
-        <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
-          <h3 className="text-lg font-semibold">More Info</h3>
-          <div className="text-center mt-2">
-            {moreInfo ? (
+            </>
+          )}
+          {activeSection === "moreInfo" && (
+            <>
+              <h3 className="text-lg font-semibold">More Info</h3>
               <div
-                className="text-sm flex flex-col text-start"
-                id="moreinfo-box"
-                dangerouslySetInnerHTML={{ __html: marked(moreInfo) }}
+                className="text-sm flex flex-col text-start mt-2"
+                dangerouslySetInnerHTML={{ __html: moreInfo }}
               ></div>
-            ) : (
-              <div>No additional information available</div>
-            )}
-          </div>
-        </div>
-
-        {/* Mistakes Section */}
-        <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
-          <h3 className="text-lg font-semibold">Mistakes</h3>
-          <div className="text-center mt-2">
-            {mistakes ? (
+            </>
+          )}
+          {activeSection === "mistakes" && (
+            <>
+              <h3 className="text-lg font-semibold">Mistakes</h3>
               <div
-                className="text-sm flex flex-col text-start"
-                id="mistakes-box"
+                className="text-sm flex flex-col text-start mt-2"
                 dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
               ></div>
-            ) : (
-              <div>No mistakes found</div>
-            )}
-          </div>
+            </>
+          )}
+
         </div>
       </div>
     </div>
