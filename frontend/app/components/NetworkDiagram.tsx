@@ -6,7 +6,8 @@ type NetworkDiagramProps = {
     width: number;
     height: number;
     data: { nodes: any[]; links: any[] };
-    activeNote: string; // Active note is now passed as a prop
+    activeNote: string;
+    onNodeClick: (noteId: string) => void; // Callback for when a node is clicked
   };
   
 
@@ -57,12 +58,13 @@ export const drawNetwork = (
   };
   
 
-export const NetworkDiagram = ({ width, height, data, activeNote }: NetworkDiagramProps) => {
+  export const NetworkDiagram = ({ width, height, data, activeNote, onNodeClick }: NetworkDiagramProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
   
     useEffect(() => {
-      const context = canvasRef.current?.getContext('2d');
-      if (!context) return;
+      const canvas = canvasRef.current;
+      const context = canvas?.getContext('2d');
+      if (!context || !canvas) return;
   
       // Initialize simulation
       const simulation = d3
@@ -77,14 +79,38 @@ export const NetworkDiagram = ({ width, height, data, activeNote }: NetworkDiagr
   
       // On each tick, update the graph and pass activeNote
       simulation.on('tick', () => {
-        drawNetwork(context, width, height, data.nodes, data.links, activeNote); // Pass activeNote
+        drawNetwork(context, width, height, data.nodes, data.links, activeNote);
       });
   
-      // Cleanup simulation on unmount
+      // Handle clicks on canvas
+      const handleCanvasClick = (event: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+  
+        // Find the clicked node
+        const clickedNode = data.nodes.find((node) => {
+          const distance = Math.sqrt(
+            (node.x - x) ** 2 + (node.y - y) ** 2
+          );
+          return distance <= RADIUS;
+        });
+  
+        // If a node is clicked, call onNodeClick
+        if (clickedNode) {
+          onNodeClick(clickedNode.id);
+        }
+      };
+  
+      // Add event listener to canvas
+      canvas.addEventListener('click', handleCanvasClick);
+  
+      // Cleanup event listener on unmount
       return () => {
         simulation.stop();
+        canvas.removeEventListener('click', handleCanvasClick);
       };
-    }, [data, width, height, activeNote]); // Add activeNote as dependency
+    }, [data, width, height, activeNote, onNodeClick]); // Add onNodeClick as dependency
   
     return (
       <div>

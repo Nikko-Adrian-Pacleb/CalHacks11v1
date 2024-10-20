@@ -436,6 +436,16 @@ export default function Home() {
     setLoading(false);
   };
 
+  const handleNodeClick = (noteId) => {
+    // Find the note in the notes array by noteId
+    const clickedNote = notes.find((note) => note.title === noteId);
+
+    // If the note is found, set it as the current note
+    if (clickedNote) {
+      setCurrentNote(clickedNote); // Update the current note
+    }
+  };
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -562,6 +572,7 @@ export default function Home() {
         height={600}
         data={notesConnection}
         activeNote={currentNote.title}
+        onNodeClick={handleNodeClick} // Pass the click handler
       />
     </div>
   );
