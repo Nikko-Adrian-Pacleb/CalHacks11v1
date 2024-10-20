@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main
-      className="container mx-auto min-h-screen flex flex-col items-center justify-center text-center"
+      className="w-full mx-auto min-h-screen flex flex-col items-center justify-center text-center"
       style={{
         backgroundImage: "url('/images/bg.jpeg')", // Correctly referencing the image
         backgroundSize: "cover", // Ensure the image covers the entire area

@@ -226,7 +226,7 @@ export default function Home() {
     <div className="flex h-screen">
       {/* Sidebar */}
       <div
-        className={`bg-blue-900 text-white p-4 transition-all duration-300 ${
+        className={`bg-cLeft text-black p-4 transition-all duration-300 ${
           isSidebarOpen ? "w-1/4" : "w-12"
         }`}
       >
@@ -234,7 +234,7 @@ export default function Home() {
           className="text-black p-2 mb-4"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          <span className="text-3xl text-cBeige">{isSidebarOpen ? "<" : ">"}</span>
+          <span className="text-3xl text-black">{isSidebarOpen ? "<" : ">"}</span>
         </button>
         {isSidebarOpen && (
           <div>
@@ -254,7 +254,7 @@ export default function Home() {
               ))}
             </ul>
             <button
-              className="text-2xl hover:bold text-white px-4 rounded mt-2"
+              className="text-2xl hover:bold text-black px-4 rounded mt-2"
               onClick={addNewNote}
             >
               +
@@ -264,21 +264,22 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="bg-gray-100 flex-grow p-8">
-        <div className="bg-white rounded-lg p-6 shadow-lg">
+      <div className="bg-mWhite flex-grow p-8">
+        <div className="bg-white rounded-lg p-6 h-full shadow-lg">
           <h1 className="text-3xl font-bold mb-4">
             <input
               type="text"
+              
               value={currentNote.title}
               onChange={handleTitleChange} // Handle title changes
-              className="border border-gray-400 rounded p-2 w-full"
+              className="border border-cDarkBlue rounded p-2 w-full"
             />
           </h1>
 
           <div className="border border-gray-400 p-4 rounded-lg">
             {isEditing && (
               <Tiptap
-                className="bg-cDarkBlack"
+                className="bg-cDarkBlue"
                 content={currentNote.content}
                 onContentChange={handleContentChange}
               />
@@ -288,29 +289,29 @@ export default function Home() {
       </div>
 
       {/* Right Sidebar */}
-      <div className="w-1/4 bg-gray-200 p-4 space-y-4">
+      <div className="w-1/4 bg-cLeft p-4 space-y-4">
         {/* Button for different implementations */}
         <button
-          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          className="border-solid border-2 border-black hover:bg-rightside rounded py-2 mx-1 px-1 mt-2"
           onClick={() => handleSectionChangeClick("Summary")}
         >
           Summary
         </button>
         <button
-          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          className="border-solid border-2 hover:bg-rightside border-black rounded py-2 px-1 mx-1 mt-2"
           onClick={() => handleSectionChangeClick("More Info")}
         >
           More Info
         </button>
         <button
-          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          className="border-solid border-2 border-black hover:bg-rightside rounded py-2 px-1  mx-1 mt-2"
           onClick={() => handleSectionChangeClick("Mistakes")}
         >
           Mistakes
         </button>
 
         {/* Content Section */}
-        <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
+        <div className="bg-rightside p-4 rounded-lg flex flex-col items-center justify-center">
           {loading ? <div role="status">
            <svg aria-hidden="true" class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
