@@ -466,12 +466,12 @@ export default function Home() {
       if (data.output) {
         setSummary(data.output);
         // Update active section immediately after setting summary
-        if (activeSection.title === "Summary") {
-          setActiveSection({
-            title: "Summary",
-            content: summary,
-          });
-        }
+        // if (activeSection.title === "Summary") {
+        //   setActiveSection({
+        //     title: "Summary",
+        //     content: summary,
+        //   });
+        // }
       } else {
         setSummary("Failed to generate summary");
       }
@@ -497,12 +497,12 @@ export default function Home() {
       if (data.output) {
         setMoreInfo(data.output);
         // Update active section immediately after setting more info
-        if (activeSection.title === "More Info") {
-          setActiveSection({
-            title: "More Info",
-            content: moreInfo,
-          });
-        }
+        // if (activeSection.title === "More Info") {
+        //   setActiveSection({
+        //     title: "More Info",
+        //     content: moreInfo,
+        //   });
+        // }
       } else {
         setMoreInfo("Failed to get more information");
       }
@@ -528,12 +528,12 @@ export default function Home() {
       if (data.output) {
         setMistakes(data.output);
         // Update active section immediately after setting mistakes
-        if (activeSection.title === "Mistakes") {
-          setActiveSection({
-            title: "Mistakes",
-            content: mistakes,
-          });
-        }
+        // if (activeSection.title === "Mistakes") {
+        //   setActiveSection({
+        //     title: "Mistakes",
+        //     content: mistakes,
+        //   });
+        // }
       } else {
         setMistakes("Failed to find mistakes");
       }
@@ -599,10 +599,7 @@ export default function Home() {
     // If the note is found, set it as the current note
     if (clickedNote) {
       setCurrentNote(clickedNote); // Update the current note
-      setActiveSection({
-        title: activeSection.title,
-        content: "",
-      });
+      handleSectionChangeClick(activeSection.title);
     }
   };
 
