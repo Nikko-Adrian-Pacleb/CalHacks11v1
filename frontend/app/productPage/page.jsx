@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Tiptap from "../components/Tiptap";
 import { marked } from "marked";
 
@@ -25,6 +25,15 @@ export default function Home() {
   const [moreInfo, setMoreInfo] = useState("");
   const [mistakes, setMistakes] = useState("");
   const [loading, setLoading] = useState(false);
+  const [debounceTimeout, setDebounceTimeout] = useState(null); // Debounce timer
+
+  // Debounce function to limit API calls
+  const debounce = (func, delay) => {
+    return (...args) => {
+      if (debounceTimeout) clearTimeout(debounceTimeout);
+      setDebounceTimeout(setTimeout(() => func(...args), delay));
+    };
+  };
 
   const handleContentChange = (updatedContent, updatedHtmlContent) => {
     setCurrentNote((prevNote) => ({
@@ -43,31 +52,43 @@ export default function Home() {
           : note
       )
     );
+
+    // Trigger debounced API calls when content changes
+    debounceApiCalls();
   };
 
+  // Debounced function to handle summary, more info, and mistakes calls
+  const debounceApiCalls = useCallback(
+    debounce(() => {
+      generateSummary();
+      getMoreInfo();
+      getMistakes();
+    }, 1000), // Delay of 1 second
+    [currentNote] // Dependency array to ensure latest note
+  );
+
   const addNewNote = () => {
-    const newNoteId = notes.length; // This generates a new note ID based on the length of the notes array
+    const newNoteId = notes.length; // Generate new note ID based on array length
     const newNote = {
       noteId: newNoteId,
       title: `New Note ${newNoteId + 1}`, // Automatically generated title
       content: "",
     };
-    setNotes([...notes, newNote]); // Add the new note to the notes array
-    setCurrentNote(newNote); // Set the new note as the current note
-    setIsEditing(true); // Set editing mode to true to allow title editing
+    setNotes([...notes, newNote]); // Add new note to array
+    setCurrentNote(newNote); // Set new note as current
+    setIsEditing(true); // Allow editing for new note
   };
 
-  // Handle title change
   const handleTitleChange = (e) => {
-    const updatedTitle = e.target.value; // Get the updated title from the input field
+    const updatedTitle = e.target.value; // Get updated title from input field
     setCurrentNote((prevNote) => ({
       ...prevNote,
-      title: updatedTitle, // Update the current note title
+      title: updatedTitle, // Update current note title
     }));
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
         note.noteId === currentNote.noteId
-          ? { ...note, title: updatedTitle } // Update the note title in the notes array
+          ? { ...note, title: updatedTitle }
           : note
       )
     );
@@ -81,7 +102,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(currentNote), // Wrap HTML in a JSON object
+        body: JSON.stringify(currentNote), // Send note as JSON
       });
 
       const data = await response.json();
@@ -129,21 +150,22 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(currentNote), // Wrap HTML in a JSON object
+        body: JSON.stringify(currentNote), // Send note as JSON
       });
 
       const data = await response.json();
       if (data.output) {
-        setMistakes(data.output); // Set the summary
+        setMistakes(data.output);
       } else {
-        setMistakes("Failed to generate summary");
+        setMistakes("Failed to find mistakes");
       }
     } catch (error) {
-      setMistakes("Error generating summary");
+      setMistakes("Error finding mistakes");
       console.error("Error:", error);
     }
     setLoading(false);
   };
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -202,26 +224,13 @@ export default function Home() {
           <h3 className="text-lg font-semibold">Summary</h3>
           <div className="text-center mt-2">
             {summary ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="summary-box"
-                  dangerouslySetInnerHTML={{ __html: marked(summary) }}
-                ></div>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={generateSummary}
-                >
-                  {loading ? "Regenerating..." : "Regenerate Summary"}
-                </button>
-              </>
+              <div
+                className="text-sm flex flex-col text-start"
+                id="summary-box"
+                dangerouslySetInnerHTML={{ __html: marked(summary) }}
+              ></div>
             ) : (
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={generateSummary}
-              >
-                {loading ? "Generating..." : "Get Summary"}
-              </button>
+              <div>No summary available</div>
             )}
           </div>
         </div>
@@ -231,26 +240,13 @@ export default function Home() {
           <h3 className="text-lg font-semibold">More Info</h3>
           <div className="text-center mt-2">
             {moreInfo ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="moreinfo-box"
-                  dangerouslySetInnerHTML={{ __html: moreInfo }}
-                ></div>
-                <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={getMoreInfo}
-                >
-                  {loading ? "Getting more info..." : "Get More Info"}
-                </button>
-              </>
+              <div
+                className="text-sm flex flex-col text-start"
+                id="moreinfo-box"
+                dangerouslySetInnerHTML={{ __html: marked(moreInfo) }}
+              ></div>
             ) : (
-              <button
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={getMoreInfo}
-              >
-                {loading ? "Getting more info..." : "Get More Info"}
-              </button>
+              <div>No additional information available</div>
             )}
           </div>
         </div>
@@ -260,26 +256,13 @@ export default function Home() {
           <h3 className="text-lg font-semibold">Mistakes</h3>
           <div className="text-center mt-2">
             {mistakes ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="mistakes-box"
-                  dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
-                ></div>
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={getMistakes}
-                >
-                  {loading ? "Finding mistakes..." : "Find Mistakes"}
-                </button>
-              </>
+              <div
+                className="text-sm flex flex-col text-start"
+                id="mistakes-box"
+                dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
+              ></div>
             ) : (
-              <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={getMistakes}
-              >
-                {loading ? "Finding mistakes..." : "Find Mistakes"}
-              </button>
+              <div>No mistakes found</div>
             )}
           </div>
         </div>
