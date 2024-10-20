@@ -25,6 +25,7 @@ export default function Home() {
   const [moreInfo, setMoreInfo] = useState("");
   const [mistakes, setMistakes] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Add state to control sidebar visibility
   const [debounceTimeout, setDebounceTimeout] = useState(null); // Debounce timer
 
   // Debounce function to limit API calls
@@ -102,12 +103,12 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(currentNote), // Send note as JSON
+        body: JSON.stringify(currentNote),
       });
 
       const data = await response.json();
       if (data.output) {
-        setSummary(data.output); // Set the summary
+        setSummary(data.output);
       } else {
         setSummary("Failed to generate summary");
       }
@@ -150,6 +151,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify(currentNote), // Send note as JSON
       });
 
@@ -169,28 +171,43 @@ export default function Home() {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="bg-blue-900 text-white w-1/4 p-4">
-        <div className="rounded-full bg-gray-300 w-16 h-16 mb-6"></div>
-        <ul className="space-y-4">
-          {notes.map((note) => (
-            <li
-              key={note.noteId}
-              className="border-b border-gray-500 pb-2 cursor-pointer"
-              onClick={() => {
-                setCurrentNote(note);
-                setIsEditing(true);
-              }}
-            >
-              {note.title}
-            </li>
-          ))}
-        </ul>
+      <div
+        className={`bg-blue-900 text-white p-4 transition-all duration-300 ${
+          isSidebarOpen ? "w-1/4" : "w-12"
+        }`}
+      >
+
         <button
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-          onClick={addNewNote}
+          className="bg-gray-400 text-black p-2 rounded-full mb-4"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          Add Note
+          {isSidebarOpen ? "<" : ">"}
         </button>
+        {isSidebarOpen && (
+          <div>
+            <div className="rounded-full bg-gray-300 w-16 h-16 mb-6"></div>
+            <ul className="space-y-4">
+              {notes.map((note) => (
+                <li
+                  key={note.noteId}
+                  className="border-b border-gray-500 pb-2"
+                  onClick={() => {
+                    setCurrentNote(note);
+                    setIsEditing(true);
+                  }}
+                >
+                  {note.title}
+                </li>
+              ))}
+            </ul>
+            <button
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
+              onClick={addNewNote}
+            >
+              Add Note
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Main Content */}
