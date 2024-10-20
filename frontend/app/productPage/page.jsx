@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, act } from "react";
 import Tiptap from "../components/Tiptap";
 import { marked } from "marked";
 
@@ -110,15 +110,17 @@ export default function Home() {
         },
         body: JSON.stringify(currentNote),
       });
-  
+
       const data = await response.json();
       if (data.output) {
         setSummary(data.output);
         // Update active section immediately after setting summary
-        setActiveSection({
-          title: "Summary",
-          content: data.output,
-        });
+        if (activeSection.title == "Summary") {
+          setActiveSection({
+            title: "Summary",
+            content: data.output,
+          });
+        }
       } else {
         setSummary("Failed to generate summary");
       }
@@ -128,7 +130,7 @@ export default function Home() {
     }
     setLoading(false);
   };
-  
+
   const getMoreInfo = async () => {
     setLoading(true);
     try {
@@ -139,15 +141,17 @@ export default function Home() {
         },
         body: JSON.stringify(currentNote),
       });
-  
+
       const data = await response.json();
       if (data.output) {
         setMoreInfo(data.output);
         // Update active section immediately after setting more info
-        setActiveSection({
-          title: "More Info",
-          content: data.output,
-        });
+        if (activeSection.title == "More Info") {
+          setActiveSection({
+            title: "More Info",
+            content: data.output,
+          });
+        }
       } else {
         setMoreInfo("Failed to get more information");
       }
@@ -157,7 +161,7 @@ export default function Home() {
     }
     setLoading(false);
   };
-  
+
   const getMistakes = async () => {
     setLoading(true);
     try {
@@ -168,15 +172,17 @@ export default function Home() {
         },
         body: JSON.stringify(currentNote),
       });
-  
+
       const data = await response.json();
       if (data.output) {
         setMistakes(data.output);
         // Update active section immediately after setting mistakes
-        setActiveSection({
-          title: "Mistakes",
-          content: data.output,
-        });
+        if (activeSection.title == "Mistakes") {
+          setActiveSection({
+            title: "Mistakes",
+            content: data.output,
+          });
+        }
       } else {
         setMistakes("Failed to find mistakes");
       }
@@ -186,7 +192,6 @@ export default function Home() {
     }
     setLoading(false);
   };
-  
 
   // Function to handle button click and update active section
   const handleSectionChangeClick = (section) => {
