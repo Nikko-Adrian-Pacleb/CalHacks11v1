@@ -26,7 +26,7 @@ export default function Home() {
   const [mistakes, setMistakes] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState({
-    title: "summary",
+    title: "Summary",
     content: "",
   }); // New state to track the active section
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Add state to control sidebar visibility
@@ -70,7 +70,7 @@ export default function Home() {
       getMistakes();
       handleSectionChangeClick(activeSection.title);
     }, 1000), // Delay of 1 second
-    [currentNote] // Dependency array to ensure latest note
+    [currentNote, activeSection] // Dependency array to ensure latest note
   );
 
   const addNewNote = () => {
@@ -110,10 +110,15 @@ export default function Home() {
         },
         body: JSON.stringify(currentNote),
       });
-
+  
       const data = await response.json();
       if (data.output) {
         setSummary(data.output);
+        // Update active section immediately after setting summary
+        setActiveSection({
+          title: "Summary",
+          content: data.output,
+        });
       } else {
         setSummary("Failed to generate summary");
       }
@@ -123,7 +128,7 @@ export default function Home() {
     }
     setLoading(false);
   };
-
+  
   const getMoreInfo = async () => {
     setLoading(true);
     try {
@@ -134,10 +139,15 @@ export default function Home() {
         },
         body: JSON.stringify(currentNote),
       });
-
+  
       const data = await response.json();
       if (data.output) {
         setMoreInfo(data.output);
+        // Update active section immediately after setting more info
+        setActiveSection({
+          title: "More Info",
+          content: data.output,
+        });
       } else {
         setMoreInfo("Failed to get more information");
       }
@@ -147,7 +157,7 @@ export default function Home() {
     }
     setLoading(false);
   };
-
+  
   const getMistakes = async () => {
     setLoading(true);
     try {
@@ -158,10 +168,15 @@ export default function Home() {
         },
         body: JSON.stringify(currentNote),
       });
-
+  
       const data = await response.json();
       if (data.output) {
         setMistakes(data.output);
+        // Update active section immediately after setting mistakes
+        setActiveSection({
+          title: "Mistakes",
+          content: data.output,
+        });
       } else {
         setMistakes("Failed to find mistakes");
       }
@@ -171,6 +186,7 @@ export default function Home() {
     }
     setLoading(false);
   };
+  
 
   // Function to handle button click and update active section
   const handleSectionChangeClick = (section) => {
@@ -281,34 +297,12 @@ export default function Home() {
 
         {/* Content Section */}
         <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
+          {loading ? <p>Loading</p> : <></>}
           <h3 className="text-lg font-semibold">{activeSection.title}</h3>
           <div
             className="text-sm flex flex-col text-start mt-2"
             dangerouslySetInnerHTML={{ __html: marked(activeSection.content) }}
           ></div>
-          {/* {activeSection === "summary" && (
-            <>
-              
-            </>
-          )}
-          {activeSection === "moreInfo" && (
-            <>
-              <h3 className="text-lg font-semibold">More Info</h3>
-              <div
-                className="text-sm flex flex-col text-start mt-2"
-                dangerouslySetInnerHTML={{ __html: moreInfo }}
-              ></div>
-            </>
-          )}
-          {activeSection === "mistakes" && (
-            <>
-              <h3 className="text-lg font-semibold">Mistakes</h3>
-              <div
-                className="text-sm flex flex-col text-start mt-2"
-                dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
-              ></div>
-            </>
-          )} */}
         </div>
       </div>
     </div>
