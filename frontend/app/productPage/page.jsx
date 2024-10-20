@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Tiptap from "../components/Tiptap";
 import { marked } from "marked";
+
 export default function Home() {
   const [notes, setNotes] = useState([
     {
@@ -24,6 +25,7 @@ export default function Home() {
   const [moreInfo, setMoreInfo] = useState("");
   const [mistakes, setMistakes] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activeSection, setActiveSection] = useState("summary"); // New state to track the active section
 
   const handleContentChange = (updatedContent, updatedHtmlContent) => {
     setCurrentNote({
@@ -64,12 +66,12 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(currentNote), // Wrap HTML in a JSON object
+        body: JSON.stringify(currentNote),
       });
 
       const data = await response.json();
       if (data.output) {
-        setSummary(data.output); // Set the summary
+        setSummary(data.output);
       } else {
         setSummary("Failed to generate summary");
       }
@@ -112,12 +114,12 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(currentNote), // Wrap HTML in a JSON object
+        body: JSON.stringify(currentNote),
       });
 
       const data = await response.json();
       if (data.output) {
-        setMistakes(data.output); // Set the summary
+        setMistakes(data.output);
       } else {
         setMistakes("Failed to generate summary");
       }
@@ -126,6 +128,19 @@ export default function Home() {
       console.error("Error:", error);
     }
     setLoading(false);
+  };
+
+  // Function to handle button click and update active section
+  const handleButtonClick = (section) => {
+    setActiveSection(section);
+    // Optionally, you can fetch data if needed when switching sections
+    if (section === "summary") {
+      setActiveSection(summary)
+    } else if (section === "moreInfo") {
+      setActiveSection(moreInfo)
+    } else if (section === "mistakes") {
+      setActiveSection(mistakes)
+    }
   };
 
   return (
@@ -172,92 +187,56 @@ export default function Home() {
       </div>
 
       {/* Right Sidebar */}
-      <div className="w-1/4 bg-gray-200 p-4 space-y-6">
-        {/* Summary Section */}
-        <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
-          <h3 className="text-lg font-semibold">Summary</h3>
-          <div className="text-center mt-2">
-            {summary ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="summary-box"
-                  dangerouslySetInnerHTML={{ __html: marked(summary) }}
-                ></div>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={generateSummary}
-                >
-                  {loading ? "Regenerating..." : "Regenerate Summary"}
-                </button>
-              </>
-            ) : (
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={generateSummary}
-              >
-                {loading ? "Generating..." : "Get Summary"}
-              </button>
-            )}
-          </div>
-        </div>
+      <div className="w-1/4 bg-gray-200 p-4 space-y-4">
+        {/* Button for different implementations */}
+        <button
+          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          onClick={() => handleButtonClick("summary")}
+        >
+          Summary
+        </button>
+        <button
+          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          onClick={() => handleButtonClick("moreInfo")}
+        >
+          More Info
+        </button>
+        <button
+          className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
+          onClick={() => handleButtonClick("mistakes")}
+        >
+          Mistakes
+        </button>
 
-        {/* More Info Section */}
+        {/* Content Section */}
         <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
-          <h3 className="text-lg font-semibold">More Info</h3>
-          <div className="text-center mt-2">
-            {moreInfo ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="moreinfo-box"
-                  dangerouslySetInnerHTML={{ __html: moreInfo }}
-                ></div>
-                <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={getMoreInfo}
-                >
-                  {loading ? "Getting more info..." : "Get More Info"}
-                </button>
-              </>
-            ) : (
-              <button
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={getMoreInfo}
-              >
-                {loading ? "Getting more info..." : "Get More Info"}
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Mistakes Section */}
-        <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
-          <h3 className="text-lg font-semibold">Mistakes</h3>
-          <div className="text-center mt-2">
-            {mistakes ? (
-              <>
-                <div
-                  className="text-sm flex flex-col text-start"
-                  id="mistakes-box"
-                  dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
-                ></div>
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
-                  onClick={getMistakes}
-                >
-                  {loading ? "Finding mistakes..." : "Find Mistakes"}
-                </button>
-              </>
-            ) : (
-              <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={getMistakes}
-              >
-                {loading ? "Finding mistakes..." : "Find Mistakes"}
-              </button>
-            )}
-          </div>
+          {activeSection === "summary" && (
+            <>
+              <h3 className="text-lg font-semibold">Summary</h3>
+              <div
+                className="text-sm flex flex-col text-start mt-2"
+                dangerouslySetInnerHTML={{ __html: marked(summary) }}
+              ></div>
+            </>
+          )}
+          {activeSection === "moreInfo" && (
+            <>
+              <h3 className="text-lg font-semibold">More Info</h3>
+              <div
+                className="text-sm flex flex-col text-start mt-2"
+                dangerouslySetInnerHTML={{ __html: moreInfo }}
+              ></div>
+            </>
+          )}
+          {activeSection === "mistakes" && (
+            <>
+              <h3 className="text-lg font-semibold">Mistakes</h3>
+              <div
+                className="text-sm flex flex-col text-start mt-2"
+                dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
+              ></div>
+            </>
+          )}
         </div>
       </div>
     </div>
