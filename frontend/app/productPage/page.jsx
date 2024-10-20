@@ -25,7 +25,10 @@ export default function Home() {
   const [moreInfo, setMoreInfo] = useState("");
   const [mistakes, setMistakes] = useState("");
   const [loading, setLoading] = useState(false);
-  const [activeSection, setActiveSection] = useState("summary"); // New state to track the active section
+  const [activeSection, setActiveSection] = useState({
+    title: "summary",
+    content: "",
+  }); // New state to track the active section
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Add state to control sidebar visibility
   const [debounceTimeout, setDebounceTimeout] = useState(null); // Debounce timer
 
@@ -65,6 +68,7 @@ export default function Home() {
       generateSummary();
       getMoreInfo();
       getMistakes();
+      handleSectionChangeClick(activeSection.title);
     }, 1000), // Delay of 1 second
     [currentNote] // Dependency array to ensure latest note
   );
@@ -153,7 +157,6 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(currentNote),
-
       });
 
       const data = await response.json();
@@ -170,15 +173,22 @@ export default function Home() {
   };
 
   // Function to handle button click and update active section
-  const handleButtonClick = (section) => {
-    setActiveSection(section);
-    // Optionally, you can fetch data if needed when switching sections
-    if (section === "summary") {
-      setActiveSection(summary)
-    } else if (section === "moreInfo") {
-      setActiveSection(moreInfo)
-    } else if (section === "mistakes") {
-      setActiveSection(mistakes)
+  const handleSectionChangeClick = (section) => {
+    if (section == "Mistakes") {
+      setActiveSection({
+        title: "Mistakes",
+        content: mistakes,
+      });
+    } else if (section == "More Info") {
+      setActiveSection({
+        title: "More Info",
+        content: moreInfo,
+      });
+    } else {
+      setActiveSection({
+        title: "Summary",
+        content: summary,
+      });
     }
   };
 
@@ -190,7 +200,6 @@ export default function Home() {
           isSidebarOpen ? "w-1/4" : "w-12"
         }`}
       >
-
         <button
           className="bg-gray-400 text-black p-2 rounded-full mb-4"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -253,33 +262,33 @@ export default function Home() {
         {/* Button for different implementations */}
         <button
           className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
-          onClick={() => handleButtonClick("summary")}
+          onClick={() => handleSectionChangeClick("Summary")}
         >
           Summary
         </button>
         <button
           className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
-          onClick={() => handleButtonClick("moreInfo")}
+          onClick={() => handleSectionChangeClick("More Info")}
         >
           More Info
         </button>
         <button
           className="border-solid border-2 border-black rounded py-2 px-3 mt-2"
-          onClick={() => handleButtonClick("mistakes")}
+          onClick={() => handleSectionChangeClick("Mistakes")}
         >
           Mistakes
         </button>
 
-
         {/* Content Section */}
         <div className="bg-gray-300 p-4 rounded-lg flex flex-col items-center justify-center">
-          {activeSection === "summary" && (
+          <h3 className="text-lg font-semibold">{activeSection.title}</h3>
+          <div
+            className="text-sm flex flex-col text-start mt-2"
+            dangerouslySetInnerHTML={{ __html: marked(activeSection.content) }}
+          ></div>
+          {/* {activeSection === "summary" && (
             <>
-              <h3 className="text-lg font-semibold">Summary</h3>
-              <div
-                className="text-sm flex flex-col text-start mt-2"
-                dangerouslySetInnerHTML={{ __html: marked(summary) }}
-              ></div>
+              
             </>
           )}
           {activeSection === "moreInfo" && (
@@ -299,8 +308,7 @@ export default function Home() {
                 dangerouslySetInnerHTML={{ __html: marked(mistakes) }}
               ></div>
             </>
-          )}
-
+          )} */}
         </div>
       </div>
     </div>
