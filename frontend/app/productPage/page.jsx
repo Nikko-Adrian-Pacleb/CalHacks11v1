@@ -66,10 +66,19 @@ export default function Home() {
   const debounceApiCalls = useCallback(
     debounce(() => {
       generateSummary();
-      getMoreInfo();
-      getMistakes();
-      handleSectionChangeClick(activeSection.title);
-    }, 2000), // Delay
+
+      setTimeout(() => {
+        getMoreInfo();
+      }, 500); // 0.5 second delay between summary and more info
+
+      setTimeout(() => {
+        getMistakes();
+      }, 500); // 1 second delay between more info and mistakes
+
+      setTimeout(() => {
+        handleSectionChangeClick(activeSection.title);
+      }, 500);
+    }, 1000), // Delay
     [currentNote, activeSection] // Dependency array to ensure latest note
   );
 
