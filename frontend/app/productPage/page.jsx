@@ -57,6 +57,22 @@ export default function Home() {
     setIsEditing(true); // Set editing mode to true to allow title editing
   };
 
+  // Handle title change
+  const handleTitleChange = (e) => {
+    const updatedTitle = e.target.value; // Get the updated title from the input field
+    setCurrentNote((prevNote) => ({
+      ...prevNote,
+      title: updatedTitle, // Update the current note title
+    }));
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.noteId === currentNote.noteId
+          ? { ...note, title: updatedTitle } // Update the note title in the notes array
+          : note
+      )
+    );
+  };
+
   const generateSummary = async () => {
     setLoading(true);
     try {
@@ -80,21 +96,6 @@ export default function Home() {
     }
     setLoading(false);
   };
-
-  // Handle title change
-  const handleTitleChange = (e) => {
-    const updatedTitle = e.target.value; // Get the updated title from the input field
-    setCurrentNote((prevNote) => ({
-      ...prevNote,
-      title: updatedTitle, // Update the current note title
-    }));
-    setNotes((prevNotes) =>
-      prevNotes.map((note) =>
-        note.noteId === currentNote.noteId
-          ? { ...note, title: updatedTitle } // Update the note title in the notes array
-          : note
-      )
-    );
 
   const getMoreInfo = async () => {
     setLoading(true);
@@ -143,7 +144,6 @@ export default function Home() {
     }
     setLoading(false);
   };
-
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
