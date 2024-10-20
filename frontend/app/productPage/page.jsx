@@ -231,10 +231,10 @@ export default function Home() {
         }`}
       >
         <button
-          className="bg-gray-400 text-black p-2 rounded-full mb-4"
+          className="text-black p-2 mb-4"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          {isSidebarOpen ? "<" : ">"}
+          <span className="text-3xl text-cBeige">{isSidebarOpen ? "<" : ">"}</span>
         </button>
         {isSidebarOpen && (
           <div>
