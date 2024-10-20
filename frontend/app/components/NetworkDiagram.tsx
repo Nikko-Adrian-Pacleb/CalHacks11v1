@@ -62,62 +62,68 @@ export const drawNetwork = (
     const canvasRef = useRef<HTMLCanvasElement>(null);
   
     useEffect(() => {
-      const canvas = canvasRef.current;
-      const context = canvas?.getContext('2d');
-      if (!context || !canvas) return;
-  
-      // Initialize simulation
-      const simulation = d3
-        .forceSimulation(data.nodes || [])
-        .force(
-          'link',
-          d3.forceLink(data.links || []).id((d: any) => d.id).distance(100)
-        )
-        .force('charge', d3.forceManyBody().strength(-100)) // Weaken repulsion between all nodes (less repulsion than before)
-        .force('center', d3.forceCenter(width / 2, height / 2)) // Standard centering for the whole graph
-        .force('collide', d3.forceCollide().radius(RADIUS + 1)) // Slight collision radius to allow nodes to be closer without overlapping
-        .force('activeNoteToCenter', (alpha) => {
-          // This custom force pulls the active note toward the center
-          data.nodes.forEach((node) => {
-            if (node.id === activeNote) {
-              node.vx += (width / 2 - node.x) * 0.05 * alpha; // Pull towards center X (reduce the strength slightly to avoid abrupt movement)
-              node.vy += (height / 2 - node.y) * 0.05 * alpha; // Pull towards center Y
-            }
+        const canvas = canvasRef.current;
+        const context = canvas?.getContext('2d');
+        
+        if (!context || !canvas) return;
+      
+        try {
+          // Initialize simulation
+          const simulation = d3
+            .forceSimulation(data.nodes || [])
+            .force(
+              'link',
+              d3.forceLink(data.links || []).id((d: any) => d.id).distance(100)
+            )
+            .force('charge', d3.forceManyBody().strength(-100)) // Weaken repulsion between all nodes (less repulsion than before)
+            .force('center', d3.forceCenter(width / 2, height / 2)) // Standard centering for the whole graph
+            .force('collide', d3.forceCollide().radius(RADIUS + 1)) // Slight collision radius to allow nodes to be closer without overlapping
+            .force('activeNoteToCenter', (alpha) => {
+              // This custom force pulls the active note toward the center
+              data.nodes.forEach((node) => {
+                if (node.id === activeNote) {
+                  node.vx += (width / 2 - node.x) * 0.05 * alpha; // Pull towards center X (reduce the strength slightly to avoid abrupt movement)
+                  node.vy += (height / 2 - node.y) * 0.05 * alpha; // Pull towards center Y
+                }
+              });
+            });
+      
+          // On each tick, update the graph and pass activeNote
+          simulation.on('tick', () => {
+            drawNetwork(context, width, height, data.nodes, data.links, activeNote);
           });
-        });
-  
-      // On each tick, update the graph and pass activeNote
-      simulation.on('tick', () => {
-        drawNetwork(context, width, height, data.nodes, data.links, activeNote);
-      });
-  
-      // Handle clicks on canvas
-      const handleCanvasClick = (event: MouseEvent) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-  
-        // Find the clicked node
-        const clickedNode = data.nodes.find((node) => {
-          const distance = Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2);
-          return distance <= RADIUS;
-        });
-  
-        // If a node is clicked, call onNodeClick
-        if (clickedNode) {
-          onNodeClick(clickedNode.id);
+      
+          // Handle clicks on canvas
+          const handleCanvasClick = (event: MouseEvent) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+      
+            // Find the clicked node
+            const clickedNode = data.nodes.find((node) => {
+              const distance = Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2);
+              return distance <= RADIUS;
+            });
+      
+            // If a node is clicked, call onNodeClick
+            if (clickedNode) {
+              onNodeClick(clickedNode.id);
+            }
+          };
+      
+          // Add event listener to canvas
+          canvas.addEventListener('click', handleCanvasClick);
+      
+          // Cleanup event listener and simulation on unmount
+          return () => {
+            simulation.stop();
+            canvas.removeEventListener('click', handleCanvasClick);
+          };
+        } catch (error) {
+          console.error('An error occurred during the network simulation setup:', error);
         }
-      };
-  
-      // Add event listener to canvas
-      canvas.addEventListener('click', handleCanvasClick);
-  
-      // Cleanup event listener on unmount
-      return () => {
-        simulation.stop();
-        canvas.removeEventListener('click', handleCanvasClick);
-      };
-    }, [data, width, height, activeNote, onNodeClick]); // Add onNodeClick as dependency
+      }, [data, width, height, activeNote, onNodeClick]); // Add onNodeClick as dependency
+      
   
     return (
       <div>

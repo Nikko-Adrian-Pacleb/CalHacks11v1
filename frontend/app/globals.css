@@ -4,6 +4,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Add this to your CSS file */
+html, body {
+  overflow-y: hidden; /* Prevent shifting when scrollbar appears */
+}
 
 /* Global styles for Tiptap editor */
 .tiptap {
