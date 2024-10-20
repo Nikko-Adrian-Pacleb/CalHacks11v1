@@ -75,7 +75,7 @@ export const drawNetwork = (
               'link',
               d3.forceLink(data.links || []).id((d: any) => d.id).distance(100)
             )
-            .force('charge', d3.forceManyBody().strength(-100)) // Weaken repulsion between all nodes (less repulsion than before)
+            .force('charge', d3.forceManyBody().strength(-50)) // Weaken repulsion between all nodes (less repulsion than before)
             .force('center', d3.forceCenter(width / 2, height / 2)) // Standard centering for the whole graph
             .force('collide', d3.forceCollide().radius(RADIUS + 1)) // Slight collision radius to allow nodes to be closer without overlapping
             .force('activeNoteToCenter', (alpha) => {

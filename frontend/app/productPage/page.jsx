@@ -137,6 +137,106 @@ export default function Home() {
         Mind mapping encourages free-flowing thought and allows ideas to branch out in multiple directions, which leads to innovative solutions and new insights.
       `),
     },
+    {
+      noteId: 9,
+      title: "Introduction to Sustainable Living",
+      content: `
+        Sustainable living refers to practices that reduce the use of Earth's natural resources. 
+        It focuses on minimizing environmental impact through energy conservation, waste reduction, and eco-friendly habits.
+      `,
+      htmlContent: marked(`
+        # Introduction to Sustainable Living
+        Sustainable living refers to practices that reduce the use of Earth's natural resources. 
+        It focuses on minimizing environmental impact through energy conservation, waste reduction, and eco-friendly habits.
+      `),
+    },
+    {
+      noteId: 10,
+      title: "Energy Conservation",
+      content: `
+        Energy conservation involves reducing energy use by using more efficient appliances, 
+        switching to renewable sources like solar, and reducing unnecessary consumption.
+      `,
+      htmlContent: marked(`
+        # Energy Conservation
+        Energy conservation involves reducing energy use by using more efficient appliances, 
+        switching to renewable sources like solar, and reducing unnecessary consumption.
+      `),
+    },
+    {
+      noteId: 11,
+      title: "Waste Reduction Strategies",
+      content: `
+        Waste reduction focuses on minimizing waste generation by practicing recycling, composting, and reusing materials.
+      `,
+      htmlContent: marked(`
+        # Waste Reduction Strategies
+        Waste reduction focuses on minimizing waste generation by practicing recycling, composting, and reusing materials.
+      `),
+    },
+    {
+      noteId: 12,
+      title: "Eco-friendly Transportation",
+      content: `
+        Eco-friendly transportation involves using modes of transport that reduce carbon emissions, 
+        such as biking, walking, public transit, and electric vehicles.
+      `,
+      htmlContent: marked(`
+        # Eco-friendly Transportation
+        Eco-friendly transportation involves using modes of transport that reduce carbon emissions, 
+        such as biking, walking, public transit, and electric vehicles.
+      `),
+    },
+    {
+      noteId: 13,
+      title: "Sustainable Agriculture",
+      content: `
+        Sustainable agriculture is the practice of farming that meets society's food needs without compromising the future by using eco-friendly methods 
+        such as crop rotation, organic farming, and reducing pesticide use.
+      `,
+      htmlContent: marked(`
+        # Sustainable Agriculture
+        Sustainable agriculture is the practice of farming that meets society's food needs without compromising the future by using eco-friendly methods 
+        such as crop rotation, organic farming, and reducing pesticide use.
+      `),
+    },
+    {
+      noteId: 14,
+      title: "Water Conservation",
+      content: `
+        Water conservation involves practices that minimize water waste, 
+        such as using water-saving appliances, fixing leaks, and collecting rainwater for reuse.
+      `,
+      htmlContent: marked(`
+        # Water Conservation
+        Water conservation involves practices that minimize water waste, 
+        such as using water-saving appliances, fixing leaks, and collecting rainwater for reuse.
+      `),
+    },
+    {
+      noteId: 15,
+      title: "Sustainable Food Choices",
+      content: `
+        Sustainable food choices focus on eating locally sourced, plant-based, and organic foods to reduce environmental impacts such as carbon emissions and water use.
+      `,
+      htmlContent: marked(`
+        # Sustainable Food Choices
+        Sustainable food choices focus on eating locally sourced, plant-based, and organic foods to reduce environmental impacts such as carbon emissions and water use.
+      `),
+    },
+    {
+      noteId: 16,
+      title: "Environmental Awareness",
+      content: `
+        Environmental awareness is the understanding of the impact of human activities on the environment, 
+        and the importance of making informed decisions to reduce negative effects on ecosystems.
+      `,
+      htmlContent: marked(`
+        # Environmental Awareness
+        Environmental awareness is the understanding of the impact of human activities on the environment, 
+        and the importance of making informed decisions to reduce negative effects on ecosystems.
+      `),
+    },
   ]);
 
   const [notesConnection, setNotesConnection] = useState({
@@ -150,6 +250,14 @@ export default function Home() {
       { id: "Critical Thinking", group: "skills" },
       { id: "Problem-Solving", group: "skills" },
       { id: "Creative Thinking", group: "skills" },
+      { id: "Introduction to Sustainable Living", group: "concepts" },
+      { id: "Energy Conservation", group: "practices" },
+      { id: "Waste Reduction Strategies", group: "practices" },
+      { id: "Eco-friendly Transportation", group: "practices" },
+      { id: "Sustainable Agriculture", group: "practices" },
+      { id: "Water Conservation", group: "practices" },
+      { id: "Sustainable Food Choices", group: "practices" },
+      { id: "Environmental Awareness", group: "concepts" },
     ],
     links: [
       {
@@ -204,6 +312,61 @@ export default function Home() {
       },
       { source: "Critical Thinking", target: "Problem-Solving", value: 1 },
       { source: "Problem-Solving", target: "Creative Thinking", value: 1 },
+      {
+        source: "Introduction to Sustainable Living",
+        target: "Energy Conservation",
+        value: 1,
+      },
+      {
+        source: "Introduction to Sustainable Living",
+        target: "Waste Reduction Strategies",
+        value: 1,
+      },
+      {
+        source: "Introduction to Sustainable Living",
+        target: "Eco-friendly Transportation",
+        value: 1,
+      },
+      {
+        source: "Introduction to Sustainable Living",
+        target: "Sustainable Agriculture",
+        value: 1,
+      },
+      {
+        source: "Introduction to Sustainable Living",
+        target: "Water Conservation",
+        value: 1,
+      },
+      {
+        source: "Energy Conservation",
+        target: "Sustainable Agriculture",
+        value: 1,
+      },
+      {
+        source: "Waste Reduction Strategies",
+        target: "Sustainable Food Choices",
+        value: 1,
+      },
+      {
+        source: "Eco-friendly Transportation",
+        target: "Energy Conservation",
+        value: 1,
+      },
+      {
+        source: "Sustainable Agriculture",
+        target: "Sustainable Food Choices",
+        value: 1,
+      },
+      {
+        source: "Water Conservation",
+        target: "Sustainable Food Choices",
+        value: 1,
+      },
+      {
+        source: "Environmental Awareness",
+        target: "Introduction to Sustainable Living",
+        value: 1,
+      },
     ],
   });
 
