@@ -2,22 +2,209 @@
 import { useState, useCallback, act } from "react";
 import Tiptap from "../components/Tiptap";
 import { marked } from "marked";
-
+import { NetworkDiagram } from "../components/NetworkDiagram";
 export default function Home() {
   const [notes, setNotes] = useState([
     {
       noteId: 0,
-      title: "Note Title",
-      content: "I hope this content is not deleted",
-      htmlContent: "",
+      title: "The Importance of Mind Mapping",
+      content: `
+        Mind mapping is a powerful note-taking technique that involves creating a visual representation of information, usually in the form of a diagram. 
+        It's essential for capturing ideas, organizing them logically, and visually representing the relationships between concepts. 
+        This method helps in structuring thoughts and allows for a more holistic understanding of a topic.
+      `,
+      htmlContent: marked(`
+        # The Importance of Mind Mapping
+        Mind mapping is a powerful note-taking technique that involves creating a visual representation of information, usually in the form of a diagram.
+        It's essential for capturing ideas, organizing them logically, and visually representing the relationships between concepts. 
+        This method helps in structuring thoughts and allows for a more holistic understanding of a topic.
+      `),
     },
     {
       noteId: 1,
-      title: "Title 2",
-      content: marked("# This should be a header"),
-      htmlContent: "",
+      title: "Why Connecting Ideas is Important",
+      content: `
+        Connecting ideas when taking notes is crucial because it helps to reveal the underlying patterns and relationships between topics. 
+        This not only aids in memory retention but also fosters a deeper understanding of the subject matter. 
+        When ideas are connected, it becomes easier to build on existing knowledge, make connections to real-world scenarios, and solve problems more effectively.
+      `,
+      htmlContent: marked(`
+        # Why Connecting Ideas is Important
+        Connecting ideas when taking notes is crucial because it helps to reveal the underlying patterns and relationships between topics.
+        This not only aids in memory retention but also fosters a deeper understanding of the subject matter. 
+        When ideas are connected, it becomes easier to build on existing knowledge, make connections to real-world scenarios, and solve problems more effectively.
+      `),
+    },
+    {
+      noteId: 2,
+      title: "Mind Mapping and Active Learning",
+      content: `
+        Mind mapping encourages active learning by forcing you to process and reorganize information as you take notes. 
+        It prompts critical thinking by asking you to evaluate how different concepts fit together, 
+        making it a great tool for problem-solving and creative thinking.
+      `,
+      htmlContent: marked(`
+        # Mind Mapping and Active Learning
+        Mind mapping encourages active learning by forcing you to process and reorganize information as you take notes. 
+        It prompts critical thinking by asking you to evaluate how different concepts fit together, 
+        making it a great tool for problem-solving and creative thinking.
+      `),
+    },
+    {
+      noteId: 3,
+      title: "Visual Representation",
+      content: `
+        A visual representation of information helps in understanding complex ideas by breaking them down into simpler, more digestible components. 
+        It leverages the brain's natural tendency to process visual information faster than text. 
+        Mind maps are a perfect example of visual representation, as they make it easier to see relationships between ideas.
+      `,
+      htmlContent: marked(`
+        # Visual Representation
+        A visual representation of information helps in understanding complex ideas by breaking them down into simpler, more digestible components. 
+        It leverages the brain's natural tendency to process visual information faster than text. 
+        Mind maps are a perfect example of visual representation, as they make it easier to see relationships between ideas.
+      `),
+    },
+    {
+      noteId: 4,
+      title: "Organizing Information",
+      content: `
+        Organizing information is a critical part of note-taking and learning. 
+        It allows you to structure ideas in a logical flow, making it easier to recall later. 
+        Mind mapping helps with organizing information by giving each idea a clear place in relation to others.
+      `,
+      htmlContent: marked(`
+        # Organizing Information
+        Organizing information is a critical part of note-taking and learning. 
+        It allows you to structure ideas in a logical flow, making it easier to recall later. 
+        Mind mapping helps with organizing information by giving each idea a clear place in relation to others.
+      `),
+    },
+    {
+      noteId: 5,
+      title: "Memory Retention",
+      content: `
+        Memory retention is the ability to store and recall information over time. 
+        By connecting ideas and creating a structured note-taking system, like mind mapping, you reinforce connections in the brain, 
+        making it easier to retrieve information later.
+      `,
+      htmlContent: marked(`
+        # Memory Retention
+        Memory retention is the ability to store and recall information over time. 
+        By connecting ideas and creating a structured note-taking system, like mind mapping, you reinforce connections in the brain, 
+        making it easier to retrieve information later.
+      `),
+    },
+    {
+      noteId: 6,
+      title: "Critical Thinking",
+      content: `
+        Critical thinking involves analyzing and evaluating information to form a judgment. 
+        Mind mapping encourages this process by making you break down information into its core components, 
+        assess relationships between concepts, and come to conclusions based on connections.
+      `,
+      htmlContent: marked(`
+        # Critical Thinking
+        Critical thinking involves analyzing and evaluating information to form a judgment. 
+        Mind mapping encourages this process by making you break down information into its core components, 
+        assess relationships between concepts, and come to conclusions based on connections.
+      `),
+    },
+    {
+      noteId: 7,
+      title: "Problem-Solving",
+      content: `
+        Problem-solving is enhanced by mind mapping because it allows you to visualize the elements of a problem and explore different solutions. 
+        By mapping out related ideas, you can identify patterns and come up with creative solutions more efficiently.
+      `,
+      htmlContent: marked(`
+        # Problem-Solving
+        Problem-solving is enhanced by mind mapping because it allows you to visualize the elements of a problem and explore different solutions. 
+        By mapping out related ideas, you can identify patterns and come up with creative solutions more efficiently.
+      `),
+    },
+    {
+      noteId: 8,
+      title: "Creative Thinking",
+      content: `
+        Creative thinking is fostered when you're able to make new connections between ideas. 
+        Mind mapping encourages free-flowing thought and allows ideas to branch out in multiple directions, which leads to innovative solutions and new insights.
+      `,
+      htmlContent: marked(`
+        # Creative Thinking
+        Creative thinking is fostered when you're able to make new connections between ideas. 
+        Mind mapping encourages free-flowing thought and allows ideas to branch out in multiple directions, which leads to innovative solutions and new insights.
+      `),
     },
   ]);
+
+  const [notesConnection, setNotesConnection] = useState({
+    nodes: [
+      { id: "The Importance of Mind Mapping", group: "concepts" },
+      { id: "Why Connecting Ideas is Important", group: "concepts" },
+      { id: "Mind Mapping and Active Learning", group: "concepts" },
+      { id: "Visual Representation", group: "benefits" },
+      { id: "Organizing Information", group: "benefits" },
+      { id: "Memory Retention", group: "benefits" },
+      { id: "Critical Thinking", group: "skills" },
+      { id: "Problem-Solving", group: "skills" },
+      { id: "Creative Thinking", group: "skills" },
+    ],
+    links: [
+      {
+        source: "The Importance of Mind Mapping",
+        target: "Why Connecting Ideas is Important",
+        value: 1,
+      },
+      {
+        source: "The Importance of Mind Mapping",
+        target: "Mind Mapping and Active Learning",
+        value: 1,
+      },
+      {
+        source: "The Importance of Mind Mapping",
+        target: "Visual Representation",
+        value: 1,
+      },
+      {
+        source: "Why Connecting Ideas is Important",
+        target: "Organizing Information",
+        value: 1,
+      },
+      {
+        source: "Why Connecting Ideas is Important",
+        target: "Memory Retention",
+        value: 1,
+      },
+      {
+        source: "Mind Mapping and Active Learning",
+        target: "Critical Thinking",
+        value: 1,
+      },
+      {
+        source: "Mind Mapping and Active Learning",
+        target: "Problem-Solving",
+        value: 1,
+      },
+      {
+        source: "Mind Mapping and Active Learning",
+        target: "Creative Thinking",
+        value: 1,
+      },
+      {
+        source: "Visual Representation",
+        target: "Organizing Information",
+        value: 1,
+      },
+      {
+        source: "Organizing Information",
+        target: "Memory Retention",
+        value: 1,
+      },
+      { source: "Critical Thinking", target: "Problem-Solving", value: 1 },
+      { source: "Problem-Solving", target: "Creative Thinking", value: 1 },
+    ],
+  });
 
   const [currentNote, setCurrentNote] = useState(notes[0]);
   const [isEditing, setIsEditing] = useState(true);
@@ -66,7 +253,6 @@ export default function Home() {
   const debounceApiCalls = useCallback(
     debounce(() => {
       generateSummary();
-
       setTimeout(() => {
         getMoreInfo();
       }, 500); // 0.5 second delay between summary and more info
@@ -77,6 +263,9 @@ export default function Home() {
 
       setTimeout(() => {
         handleSectionChangeClick(activeSection.title);
+      }, 500);
+      setTimeout() => {
+        handleSectionChangeClick(activeSection.title);  
       }, 500);
     }, 1000), // Delay
     [currentNote, activeSection] // Dependency array to ensure latest note
@@ -222,6 +411,31 @@ export default function Home() {
     }
   };
 
+  const getNoteConnections = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/getNotesConnections", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(notes),
+      });
+
+      const data = await response.json();
+      if (data.connections) {
+        console.log(data.connections);
+        setNotesConnection(data.connections);
+      } else {
+        setNotesConnection(null);
+      }
+    } catch (error) {
+      setNotesConnection(null);
+      console.error("Error:", error);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -325,6 +539,8 @@ export default function Home() {
           ></div>
         </div>
       </div>
+      <h1>Network Diagram</h1>
+      <NetworkDiagram width={800} height={600} data={notesConnection} />
     </div>
   );
 }
