@@ -6,7 +6,7 @@ export async function POST(req, res) {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const data = await req.json();
-    const prompt = data.body;
+    const prompt = data.htmlContent;
     console.log(["start the sentence with Hello", prompt]);
     const result = await model.generateContent([
       "You are a AI in a note taking app.",
